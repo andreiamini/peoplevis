@@ -1,0 +1,113 @@
+<!-- TODO: Add number check for text field; Pass in text field number as variable to script so it can do it's thang; Add easter eggs. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <title>THREE.js</title>
+  <meta charset="utf-8">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+</head>
+<body style="margin: 0;">
+	  <h1>PeopleVis</h1>
+	  <p>Enter a number of people: </p>
+		<input type="text" class="people" id="people" name="people">
+        <input type="submit" class="button" id="button" name="submit">
+
+  <script src="javascripts/three.min.js"></script>
+  <script src="javascripts/OrbitControls.js"></script>
+
+  <script>
+
+    // Set up the scene, camera, and renderer as global variables.
+    var scene, camera, renderer;
+
+    init();
+    animate();
+
+    // Sets up the scene.
+    function init() {
+
+      // Create the scene and set the scene size.
+      scene = new THREE.Scene();
+      var WIDTH = window.innerWidth,
+          HEIGHT = window.innerHeight;
+
+      // Create a renderer and add it to the DOM.
+      renderer = new THREE.WebGLRenderer({antialias:true});
+      renderer.setSize(WIDTH, HEIGHT);
+      document.body.appendChild(renderer.domElement);
+
+      // Create a camera, zoom it out from the model a bit, and add it to the scene.
+      camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.5, 20000);
+      camera.position.set(50,10,-30);
+      scene.add(camera);
+
+      // Create an event listener that resizes the renderer with the browser window.
+      window.addEventListener('resize', function() {
+        var WIDTH = window.innerWidth,
+            HEIGHT = window.innerHeight;
+        renderer.setSize(WIDTH, HEIGHT);
+        camera.aspect = WIDTH / HEIGHT;
+        camera.updateProjectionMatrix();
+      });
+
+      // Set the background color of the scene.
+      renderer.setClearColor(0x333F47, 1);
+
+      // Create a light, set its position, and add it to the scene.
+      var light = new THREE.PointLight(0xffffff);
+      light.position.set(-100,200,100);
+      scene.add(light);
+
+      // Load in the mesh and add it to the scene.
+      	var loader = new THREE.JSONLoader();
+        loader.load( "/models/human.js", function(geometry){
+       	 $('#button').click(function() { 
+	       	 console.log(document.getElementById("people").value);
+	       	 var people = document.getElementById("people").value;
+	       	 var obj, i;
+    			 for (i=scene.children.length-1; i>= 0; i--) {
+    			   obj = scene.children[i];
+    			   scene.remove(obj);
+    			 }
+           var zPos = 0;
+           var xPos = 0;
+           var root = Math.sqrt(people);
+           var column = Math.round(root); 
+	       	 for(i=0; i<people; i++) {
+	       	 	 var material = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.FlatShading });
+	       	 	 mesh = new THREE.Mesh(geometry, material);
+             mesh.position.x = i*3;
+             xPos += 3;
+             if(i%column===0) {
+               zPos += 3;
+               xPos = 0;
+               mesh.position.x = 0;
+               console.log("Num 2: " + mesh.position.z);
+             }
+             console.log(zPos);
+             mesh.position.z = zPos;
+             mesh.position.x = xPos;
+		       	 scene.add(mesh);
+       	  }
+       	 });
+       });
+      // Add OrbitControls for panning with mouse
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    }
+
+
+    // Renders the scene and updates the render as needed.
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Render the scene.
+      renderer.render(scene, camera);
+      controls.update();
+
+    }
+
+  </script>
+</body>
+</html>

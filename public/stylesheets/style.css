@@ -1,0 +1,44 @@
+h1 {
+	font-family: Helvetica; 
+	position: fixed; 
+	color: white; 
+	padding-top: 20px;
+	left: 50px;
+}
+
+p {
+	font-family: Helvetica; 
+	position: fixed; 
+	color: white; 
+	padding-top: 70px; 
+	left: 50px;
+}
+
+input[type=text] {
+	border: 0px;
+	font-size: 20px;
+	color: white;
+	font-family: Helvetica;
+	background: none;
+	position: fixed;
+	padding-top: 120px;
+	left: 50px;
+	color: white;
+	border-style: solid;
+    border-bottom: thick dotted #fff;
+}
+
+*:focus {
+	outline: none;
+}
+
+input[type=submit] {
+	padding: 8px;
+	background:#3498db; 
+	border:0 none;
+	border-radius: 5px;
+	color: white;
+	position:fixed;
+	top:160px;
+	left:50px;
+	cursor: pointer;
